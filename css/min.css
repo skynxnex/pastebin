@@ -1,0 +1,27 @@
+#wrapper {
+	width: 400px;
+	margin: 0 auto;
+	margin-top: 100px;
+	border: 1px solid gray;
+	border-radius: 15px;
+	box-shadow: 10px 10px 5px #888;
+	height: 240px;
+}
+
+#login {
+	width: 200px;
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+.center {
+	margin: 0 auto;
+}
+
+.divider {
+	height: 10px;
+}
+
+#logoutbutton {
+	margin-right: 30px;
+}
