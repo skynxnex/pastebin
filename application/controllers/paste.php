@@ -67,6 +67,22 @@ class Paste extends CI_Controller {
 			// echo("<p>Message successfully sent!</p>");
 		// }
 	}
+
+	public function top() {
+		if(loggedin()) {
+			$result = $this->paste_model->top();
+				if($result) {
+					$data['pastes'] = $result;
+					$data['body'] = 'top_pastes';
+					$this->load->view('template', $data);
+				} else {
+					$data['body'] = 'error';
+					$this->load->view('template', $data);				
+				}
+		} else {
+			$this->load->view('login');
+		}
+	}
 	
 	public function raw() {
 		$result = $this->paste_model->getRaw();

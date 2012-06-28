@@ -7,6 +7,15 @@
 		    $this->load->database();
 		}
 		
+		public function top() {
+			$this->db->from('paste');
+			$this->db->limit(10);
+			$this->db->where('deleted', 0);
+			$this->db->order_by('viewed', 'desc');
+			$result = $this->db->get();
+			return $result->result();
+		}
+		
 		public function getRaw() {
 			$this->db->join('encoding', 'encoding.id = paste.encoding_id');
 			$result = $this->db->get_where('paste', array('url' => $this->uri->segment(3)));
@@ -57,7 +66,17 @@
 			$this->db->where('url', $this->uri->segment(3));
 			$this->db->where('deleted', 0);
 			$result = $this->db->get();
+			if($result) {
+				$this->updateViewed($result->row());
+			}
 			return $result->row();
+		}
+		
+		private function updateViewed($paste) {
+			$viewed = $paste->viewed + 1;
+			$data = array('viewed' => $viewed);
+			$this->db->where('url', $paste->url);
+			$result = $this->db->update('paste', $data);
 		}
 		
 		public function getMypastes($start = null, $limit = null) {
