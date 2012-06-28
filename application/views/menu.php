@@ -6,9 +6,24 @@
 				<li class="divider-vertical"></li>
 				<li><a href="<?php echo base_url(); ?>">New paste</a></li>
 				<li><a href="<?php echo base_url(); ?>paste/my">My pastes</a></li>
+				<li><a href="<?php echo base_url(); ?>paste/top">Top pastes</a></li>
 				<li><a href="<?php echo base_url(); ?>user/profile">Profile</a></li>
+				<?php
+					if($this->session->userdata('admin')) {
+						$count = unreadReports();
+						if($count <=0) {
+							echo '<li><a href="'.base_url().'paste/reports">Reports <span class="label label-success"> '.unreadReports().'</span></a></li>';
+						} elseif($count <= 9) {
+							echo '<li><a href="'.base_url().'paste/reports">Reports <span class="label label-warning"> '.unreadReports().'</span></a></li>';
+						} else {
+							echo '<li><a href="'.base_url().'paste/reports">Reports <span class="label label-important"> '.unreadReports().'</span></a></li>';
+						}
+					}
+				?>
 				<li class="divider-vertical"></li>
-				<li><span class="navbar-text">Inloggad som: <?php echo $this->session->userdata('name') ?></span></li>
+				<li><span class="navbar-text">Logged in as: <?php echo $this->session->userdata('name') ?></span></li>
+				<li class="divider-vertical"></li>
+				<li><img id="pic" src="http://www.gravatar.com/avatar/<?php echo $this->session->userdata('gravatar'); ?>?d=mm" alt="" /></li>
 				<li class="divider-vertical"></li>
 			<?php
 				echo '<li>';

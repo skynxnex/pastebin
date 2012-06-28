@@ -7,9 +7,71 @@
 		    $this->load->database();
 		}
 		
-		public function getPaste() {
+		public function getRaw() {
+			$this->db->join('encoding', 'encoding.id = paste.encoding_id');
 			$result = $this->db->get_where('paste', array('url' => $this->uri->segment(3)));
+			return $result->row();  
+		}
+		
+		public function delete() {
+			$data = array('deleted' => 1);
+			$this->db->where('url', $this->uri->segment(3));
+			$result = $this->db->update('paste', $data);
+			return $result;
+		}
+		
+		public function mark() {
+			$data = array('viewed' => 1);
+			$this->db->where('id', $this->uri->segment(3));
+			$result = $this->db->update('report', $data);
+			return $result;
+		}
+		
+		public function report() {
+			$data = array(
+				'url'		=> $this->uri->segment(3),
+				'user_id'	=> $this->session->userdata('id'),
+				'viewed'	=> 0,
+				'cause'		=> $this->input->post('reason')
+			);
+			$this->db->set('report_date', 'NOW()', FALSE);
+			$result = $this->db->insert('report', $data);
+			return $result;
+		}
+		
+		public function getReports($start = null, $limit = null) {
+			if($start || $limit) {
+				$this->db->limit($limit, $start);
+			}
+			$this->db->select('report.id, report.url, report.viewed, report.cause, report.report_date, user.name');
+			$this->db->join('user', 'report.user_id = user.id');
+			$this->db->order_by('viewed, report_date desc, report.id desc');
+			$result = $this->db->get('report');
+			return $result->result();	
+		}
+		
+		public function getPaste() {
+			$this->db->select('paste.*, encoding.type, encoding.name');
+			$this->db->from('paste');
+			$this->db->join('encoding', 'encoding.id = paste.encoding_id');
+			$this->db->where('url', $this->uri->segment(3));
+			$this->db->where('deleted', 0);
+			$result = $this->db->get();
 			return $result->row();
+		}
+		
+		public function getMypastes($start = null, $limit = null) {
+			$order = $this->uri->segment(5);
+			if($start !== null) {
+				$this->db->limit($limit, $start);
+			}
+			if($this->uri->segment(3) == 'sort') {
+				$this->db->order_by($this->uri->segment(4), $order);
+			} else {
+				$this->db->order_by('id', 'desc');			
+			}
+			$result = $this->db->get_where('paste', array('deleted' => 0, 'user_id' => $this->session->userdata('id')));
+			return $result->result();	
 		}
 		
 		public function create() {
@@ -19,13 +81,17 @@
 			} else {
 				$vis = 0;
 			}
+			$result = $this->db->get_where('encoding', array('type' => $this->input->post('encoding')));
+			$enc_id = $result->row()->id;
 			$data = array(
-				'user_id'		=> 1,
+				'user_id'		=> $this->session->userdata('id'),
 				'headline' 		=> $this->input->post('headline'),
 				'paste'			=> $this->input->post('paste'),
 				'visibility'	=> $vis,
-				'url' 			=> $this->urlCheck($this->generateString())
+				'url' 			=> $this->urlCheck(generate_string(30)),
+				'encoding_id'	=> $enc_id
 			);
+			$this->db->set('paste_date', 'NOW()', FALSE);
 			$result = $this->db->insert('paste', $data);
 			return $result;
 		}
@@ -33,7 +99,7 @@
 		private function urlCheck($url) {
 			$result = $this->db->get_where('paste', array('url' => $url));
 			if($result->row()) {
-				$url = $this->generateString();
+				$url = $this->generate_string();
 				$this->urlCheck($url);
 			} else {
 				return $url;
@@ -45,53 +111,61 @@
 			$this->db->from('paste');
 			$this->db->join('user', 'user.id = paste.user_id');
 			$this->db->where('visibility', 1);
+			$this->db->where('deleted', 0);
 			$this->db->order_by("paste.id", "desc"); 
 			$this->db->limit('10');
 			$result = $this->db->get();
 			return $result->result();
 		}
 		
-		private function generateString($length = 8) {
-
-		    // start with a blank password
-		    $password = "";
-		
-		    // define possible characters - any character in this string can be
-		    // picked for use in the password, so if you want to put vowels back in
-		    // or add special characters such as exclamation marks, this is where
-		    // you should do it
-		    $possible = "2346789bcdfghjkmnpqrtvwxyzBCDFGHJKLMNPQRTVWXYZ";
-		
-		    // we refer to the length of $possible a few times, so let's grab it now
-		    $maxlength = strlen($possible);
-		  
-		    // check for length overflow and truncate if necessary
-		    if ($length > $maxlength) {
-		      $length = $maxlength;
-		    }
+		public function edit() {
+			$vis = '';
+			if($this->input->post('visibility') == 'public') {
+				$vis = 1;
+			} else {
+				$vis = 0;
+			}
+			$result = $this->db->get_where('encoding', array('type' => $this->input->post('encoding')));
+			$enc_id = $result->row()->id;
+			$data = array(
+				'headline' 		=> $this->input->post('headline'),
+				'paste'			=> $this->input->post('paste'),
+				'visibility'	=> $vis,
+				'encoding_id'	=> $enc_id
+			);
 			
-		    // set up a counter for how many characters are in the password so far
-		    $i = 0; 
-		    
-		    // add random characters to $password until $length is reached
-		    while ($i < $length) { 
+			$this->db->where('url', $this->uri->segment(3));
+			$result = $this->db->update('paste', $data);
+			return $result; 
+		}
 		
-		      // pick a random character from the possible ones
-		      $char = substr($possible, mt_rand(0, $maxlength-1), 1);
-		        
-		      // have we already used this character in $password?
-		      if (!strstr($password, $char)) { 
-		        // no, so it's OK to add it onto the end of whatever we've already got...
-		        $password .= $char;
-		        // ... and increase the counter by one
-		        $i++;
-		      }
+		public function getEncodings() {
+			$this->db->order_by('type');
+			$result = $this->db->get('encoding');
+			return $result->result();
+		}
 		
-		    }
+		public function search() {
+			if(substr($this->input->post('search'), 0, 1) =='"' ) {
+				$this->db->or_like('paste', str_replace('"', '', $this->input->post('search')));
+				$this->db->or_like('headline', str_replace('"', '', $this->input->post('search')));
+			} else {
+				$words = explode(' ', $this->input->post('search'));
+				foreach($words as $word) {
+					$this->db->or_like('paste', $word);
+					$this->db->or_like('headline', $word);
+				}
+			}
+			$this->db->having('visibility = 1');
+			$this->db->limit('10');
+			$this->db->order_by('id', 'desc');
+			$result = $this->db->get_where('paste');
+			return $result->result();
+		}
 		
-		    // done!
-		    return $password;
-		
-		  }
-		
+		public function getUnreadReports() {
+			$result = $this->db->get_where('report', array('viewed' => 0));
+			return count($result->result());
+			
+		}
 	}

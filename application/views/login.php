@@ -1,5 +1,5 @@
 <?php $this->load->view('header'); ?>
-
+<div class="span8">
 <div id="wrapper">
 	<div id="login">
 		<h2>Log in</h2>	
@@ -27,10 +27,13 @@
 	);
 
 	echo form_open('/user/login', $form_attributes);
+	echo form_error('login_error');
 	echo form_fieldset();
+	echo form_error('username');
 	echo form_label('Username','username');
 	echo form_input($input_data);
 	echo '<div class="divider"></div>';
+	echo form_error('password');
 	echo form_label('Password','password');
 	echo form_password('password');
 	echo '<div class="divider"></div>';
@@ -41,11 +44,15 @@
 	echo form_close();
 	echo '<div class="divider"></div>';
 	echo '<a href="'.base_url().'user/create">Create new user</a>';
+	echo '<div class="divider"></div>';
+	echo '<a href="'.base_url().'user/newpass">Forgotten your password?</a>';
 	
 ?>
-
+		</div>
 	</div>
 </div>
+<div class="divider"></div>
+<?php $this->load->view('flow'); ?>
 
 <?php
 	$this->load->view('footer');
