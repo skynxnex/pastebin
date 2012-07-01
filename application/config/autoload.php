@@ -64,7 +64,7 @@ $autoload['libraries'] = array('session', 'form_validation', 'pagination');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('loggedin', 'form', 'url', 'security', 'flow', 'text', 'generate_string', 'cookie', 'recaptchalib', 'pastebin');
+$autoload['helper'] = array('loggedin', 'form', 'url', 'security', 'flow', 'text', 'generate_string', 'cookie', 'recaptchalib', 'pastebin', 'html');
 
 
 /*

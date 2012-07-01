@@ -1,9 +1,9 @@
-<!DOCTYPE HTML>
+<?php echo doctype('html5') ?>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<title>A pastebin</title>
-	<link rel="icon" type="image/png" href="<?php echo base_url(); ?>img/favicon.png">
+	<?php echo link_tag('img/favicon.ico', 'shortcut icon', 'image/ico'); ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/min.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>

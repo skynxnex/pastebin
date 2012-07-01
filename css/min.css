@@ -37,6 +37,10 @@ pre {
 	margin-right: 30px;
 }
 
+.push-down {
+	margin-bottom: 50px;
+}
+
 #paste {
   display: block;
   padding: 8.5px;
