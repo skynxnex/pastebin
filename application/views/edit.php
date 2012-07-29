@@ -10,7 +10,7 @@
 		echo form_open('/paste/edit/'.$paste->url, array('class' => 'form-vertical'));
 			echo form_error('headline');
 			echo form_label('Headline (brief description)', 'headline');
-			echo form_input(array('name' => 'headline', 'class' => 'span8', 'value' => $paste->headline));
+			echo form_input(array('name' => 'headline', 'class' => 'span8', 'value' => set_value('headline') ? set_value('headline') : $paste->headline));
 			echo form_error('paste');
 			echo form_label('Your paste', 'paste');
 			echo form_textarea(array('name' => 'paste', 'class' => 'span8', 'rows' => 18, 'value' => $paste->paste));			

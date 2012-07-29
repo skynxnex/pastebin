@@ -177,7 +177,14 @@ class Paste extends CI_Controller {
 			if($this->input->post()) {
 				$result = $this->paste_model->delete();
 				if($result) {
-					$data['body'] = 'success';
+					$mess[] = array(
+    					'message' => 'The paste was removed.',
+    					'type' => '',
+    					'heading' => 'Sucess!'
+    				);
+					$data['encodings'] = $this->paste_model->getEncodings();
+    				$this->session->set_userdata('messages', $mess);
+					$data['body'] = 'main';
 					$this->load->view('template', $data);
 				} else {
 					$data['body'] = 'error';
@@ -355,8 +362,15 @@ class Paste extends CI_Controller {
 				} else {
 					$result = $this->paste_model->edit();
 					if($result) {
-						$data['body'] = 'success';
-						$this->load->view('template', $data);
+						$mess[] = array(
+    					'message' => 'The paste was edited.',
+    					'type' => '',
+    					'heading' => 'Sucess!'
+    					);
+						$this->session->set_userdata('messages', $mess);
+						// $data['body'] = 'main';
+						// $this->load->view('template', $data);
+						redirect('/paste/show/'.$this->uri->segment(3) , 'refresh');
 					} else {
 						$data['body'] = 'error';
 						$this->load->view('template', $data);				
