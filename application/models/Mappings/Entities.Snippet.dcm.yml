@@ -14,7 +14,7 @@ Entities\Snippet:
     visibility:
       type: integer(11)
     date:
-      type: date
+      type: datetime
     deleted:
       type: integer(1)
       zerofill: true
@@ -23,6 +23,10 @@ Entities\Snippet:
       type: integer(1)
       zerofill: true
       unsigned: true
+  oneToMany:
+    reports:
+      targetEntity: Report
+      mappedBy: report
   manyToOne:
     encoding:
       targetEntity: Encoding

@@ -30,6 +30,9 @@ class User extends CI_Controller {
             'gravatar'  =>  md5( strtolower( trim($user->getEmail())))
             )
           );
+          if($user->getAdmin() == 1) {
+            $this->session->set_userdata(array('admin' => 1));
+          }
           redirect(base_url(), 'refresh');
         } else {
           $this->form_validation->set_error_delimiters('<div class="alert alert-error">', '</div>');

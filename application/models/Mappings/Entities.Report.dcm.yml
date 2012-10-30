@@ -7,22 +7,21 @@ Entities\Report:
       generator:
         strategy: AUTO
   fields:
-    url:
-      type: string(255)
-    cause:
+    reason:
       type: string(255)
     report_date:
       type: datetime
     viewed:
       type: integer(1)
       default: null
-  oneToMany:
-    snippet:
-      targetEntity: Snippet
-      mappedBy: snippet
   manyToOne:
     user:
       targetEntity: User
       joinColumns:
         id_user:
+          referencedColumnName: id
+    snippet:
+      targetEntity: Snippet
+      joinColumns:
+        id_snippet:
           referencedColumnName: id

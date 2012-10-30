@@ -6,21 +6,21 @@
 		<tr>
 			<th>URL</th>
 			<th>Reporter</th>
-			<th>Cause</th>
+			<th>Reason</th>
 			<th class="span2">Date</th>
 			<th></th>
 		</tr>
 		<?php
 			foreach($reports as $report) {
 				echo '<tr>';
-				echo '<td><a href="'.base_url().'paste/show/'.$report->url.'">Link</a></td>';
-				echo '<td>'.$report->name.'</td>';
-				echo '<td>'.$report->cause.'</td>';
-				echo '<td>'.$report->report_date.'</td>';
-				if($report->viewed) {
+				echo '<td><a href="'.base_url().'paste/show/'.$report->getSnippet()->getId().'">Link</a></td>';
+				echo '<td>'.$report->getUser()->getName().'</td>';
+				echo '<td>'.$report->getReason().'</td>';
+				echo '<td>'.$report->getReportDate()->format('Y-m-d').'</td>';
+				if($report->getViewed()) {
 					echo '<td></td>';
 				} else {
-					echo '<td><a href="'.base_url().'paste/mark/'.$report->id.'" class="btn-small btn-info">Viewed</a></td>';
+					echo '<td><a href="'.base_url().'paste/mark/'.$report->getId().'" class="btn-small btn-info">Viewed</a></td>';
 				}
 				echo '</tr>';
 			}

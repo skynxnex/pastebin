@@ -117,7 +117,8 @@ class Paste extends CI_Controller {
   public function reports() {
     if (loggedin()) {
       if ($this->session->userdata('admin')) {
-        $result = $this->paste_model->getReports();
+        
+        $result = $this->doctrine->em->getRepository('Entities\Report')->findAll();
         if ($result) {
           $ppage = 15;
           $start = 0;
@@ -125,7 +126,7 @@ class Paste extends CI_Controller {
           $config['uri_segment'] = 3;
           $config['num_links'] = 8;
           $config['base_url'] = base_url() . 'paste/reports/';
-          $config['total_rows'] = count($result);
+          $config['total_rows'] = count($this->doctrine->em->getRepository('Entities\Report')->findAll());
           $config['per_page'] = $ppage;
 
           $config['full_tag_open'] = '<div class="pagination"><ul>';
@@ -148,7 +149,7 @@ class Paste extends CI_Controller {
           }
           $data['pages'] = $this->pagination->create_links();
 
-          $data['reports'] = $this->paste_model->getReports($start, $ppage);
+          $data['reports'] = $this->doctrine->em->getRepository('Entities\Report')->findAll();
           $data['body'] = 'reports';
           $this->load->view('template', $data);
 
@@ -201,14 +202,19 @@ class Paste extends CI_Controller {
   public function report() {
     if (loggedin()) {
       if ($this->input->post()) {
-        $result = $this->paste_model->report();
-        if ($result) {
-          $data['body'] = 'success';
-          $this->load->view('template', $data);
-        } else {
-          $data['body'] = 'error';
-          $this->load->view('template', $data);
-        }
+        $snippet = $this->doctrine->em->getRepository('Entities\Snippet')->findOneBy(array('id' => $this->uri->segment(3)));
+        $user = $this->doctrine->em->getRepository('Entities\User')->findOneBy(array('id' => $this->session->userdata('id')));
+        $report = new Entities\Report;
+        $report->setSnippet($snippet);
+        $report->setUser($user);
+        $report->setReason($this->input->post('reason'));
+        $report->setReportDate(new \DateTime("now"));
+        $report->setViewed(0);
+        $this->doctrine->em->persist($report);
+        $this->doctrine->em->flush();
+        $data['body'] = 'success';
+        $this->load->view('template', $data);
+        
       } else {
         $data['body'] = 'report';
         $this->load->view('template', $data);
