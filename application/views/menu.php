@@ -1,12 +1,12 @@
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<div class="container">
-			<a class="brand">Paste in the bin</a>
+			<a class="brand">Codesnippets</a>
 			<ul class="nav">
 				<li class="divider-vertical"></li>
-				<li><a href="<?php echo base_url(); ?>">New paste</a></li>
-				<li><a href="<?php echo base_url(); ?>paste/my">My pastes</a></li>
-				<li><a href="<?php echo base_url(); ?>paste/top">Top pastes</a></li>
+				<li><a href="<?php echo base_url(); ?>">New codesnippet</a></li>
+				<li><a href="<?php echo base_url(); ?>paste/my">My snippets</a></li>
+				<li><a href="<?php echo base_url(); ?>paste/top">Top snippets</a></li>
 				<li><a href="<?php echo base_url(); ?>user/profile">Profile</a></li>
 				<?php
 					if($this->session->userdata('admin')) {

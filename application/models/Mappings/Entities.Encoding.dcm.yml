@@ -1,0 +1,17 @@
+Entities\Encoding:
+  type: entity
+  table: encoding
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+      type: string(255)
+    type:
+      type: string(255)
+  oneToMany:
+    snippets:
+      targetEntity: Snippet
+      mappedBy: snippet

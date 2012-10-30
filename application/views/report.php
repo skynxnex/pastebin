@@ -1,5 +1,5 @@
 <div class="page-header span8">
-	<h1>Report a paste</h1>
+	<h1>Report a snippet</h1>
 </div>
 <div class="span8">
 	<?php

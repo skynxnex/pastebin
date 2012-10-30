@@ -1,0 +1,38 @@
+Entities\User:
+  type: entity
+  table: user
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+      type: string(45)
+    user_name:
+      type: string(45)
+    email:
+      type: string(45)
+    password:
+      type: string(45)
+    activation_code:
+      type: string(45)
+      default: null
+      nullable: true
+    active:
+      type: integer(1)
+      default: null
+      nullable: true
+    admin:
+      type: integer(1)
+      default: null
+      nullable: true
+    last_login:
+      type: date
+  oneToMany:
+    snippets:
+      targetEntity: Snippet
+      mappedBy: snippet
+    reports:
+      targetEntity: Report
+      mappedBy: report

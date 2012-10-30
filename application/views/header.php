@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>A pastebin</title>
+	<title>CodeSnippets</title>
 	<?php echo link_tag('img/favicon.ico', 'shortcut icon', 'image/ico'); ?>
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/min.css" />

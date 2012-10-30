@@ -6,7 +6,7 @@
 		<tr>
 			<th>Date</th>
 			<th>Headline</th>
-			<th>Paste</th>
+			<th>Snippet</th>
 			<th></th>
 			<th></th>
 		</tr>
@@ -16,15 +16,15 @@
 			} else {
 				foreach($pastes as $paste) {
 					echo '<tr>';
-					echo '<td>'.$paste->paste_date.'</td>';
-					echo '<td>'.character_limiter($paste->headline, 20).'</td>';
-					echo '<td>'.character_limiter(htmlentities($paste->paste), 200).'</td>';
-					if($paste->user_id == $this->session->userdata('id')) {
-						echo '<td><a href="'.base_url().'paste/edit/'.$paste->url.'" class="btn-small btn-info">Edit</a></td>';
+					echo '<td>'.$paste->getDate()->format('Y-m-d').'</td>';
+					echo '<td>'.character_limiter($paste->getHeadline(), 20).'</td>';
+					echo '<td>'.character_limiter(htmlentities($paste->getSnippet()), 200).'</td>';
+					if($paste->getUser()->getId() == $this->session->userdata('id')) {
+						echo '<td><a href="'.base_url().'paste/edit/'.$paste->getId().'" class="btn-small btn-info">Edit</a></td>';
 					} else {
 						echo '<td></td>';
 					}
-					echo '<td><a href="'.base_url().'paste/show/'.$paste->url.'" class="btn-small btn-primary">View</a></td>';
+					echo '<td><a href="'.base_url().'paste/show/'.$paste->getId().'" class="btn-small btn-primary">View</a></td>';
 					echo '</tr>';
 				}
 			}

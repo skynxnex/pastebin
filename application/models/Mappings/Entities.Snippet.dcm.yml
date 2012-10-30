@@ -1,0 +1,36 @@
+Entities\Snippet:
+  type: entity
+  table: snippet
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    headline:
+      type: string(255)
+    snippet:
+      type: text
+    visibility:
+      type: integer(11)
+    date:
+      type: date
+    deleted:
+      type: integer(1)
+      zerofill: true
+      unsigned: true
+    viewed:
+      type: integer(1)
+      zerofill: true
+      unsigned: true
+  manyToOne:
+    encoding:
+      targetEntity: Encoding
+      joinColumns:
+        id_encoding:
+          referencedColumnName: id
+    user:
+      targetEntity: User
+      joinColumns:
+        id_user:
+          referencedColumnName: id

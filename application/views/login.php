@@ -4,7 +4,10 @@
 	<div id="login">
 		<h2>Log in</h2>	
 <?php
-	
+	echo validation_errors();
+  if(isset($message)) {
+    echo $message;
+  }
 	$form_attributes = array('class' => 'center form-horizontal', 'id' => 'login_form');
 	$button_data = array(
 	    'name' => 'button',

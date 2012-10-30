@@ -1,0 +1,28 @@
+Entities\Report:
+  type: entity
+  table: report
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    url:
+      type: string(255)
+    cause:
+      type: string(255)
+    report_date:
+      type: datetime
+    viewed:
+      type: integer(1)
+      default: null
+  oneToMany:
+    snippet:
+      targetEntity: Snippet
+      mappedBy: snippet
+  manyToOne:
+    user:
+      targetEntity: User
+      joinColumns:
+        id_user:
+          referencedColumnName: id
